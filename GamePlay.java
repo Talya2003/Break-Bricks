@@ -63,7 +63,7 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener {
                 ball_direction_y = -ball_direction_y;
             }
 
-            //A it is like a label and it helps us to know who is the loop that break (instead of write 'break' several times)
+            //A : it is like a label, and it helps us to know who is the loop that break (instead of write 'break' several times)
             A: for (int i = 0; i < map_generator.map.length; i++) {
                 for (int j = 0; j < map_generator.map[0].length; j++) {
                     if(map_generator.map[i][j] > 0) {
@@ -77,7 +77,7 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener {
                         Rectangle ball_rect = new Rectangle(ball_position_x , ball_position_y , 20 , 20);
                         Rectangle brick_rect = rect;
 
-                        if (brick_rect.intersects(brick_rect)) {
+                        if (ball_rect.intersects(brick_rect)) {
                             map_generator.set_brick_value(0 , i , j);
                             total_bricks--;
                             score += 5;
