@@ -10,6 +10,7 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener {
     private boolean is_play = false;
     private int score = 0;
     private int total_bricks = 21;
+    private MapGenerator map_generator;
     private Timer time;
     private int delay = 8;
     private int player_x = 310;
@@ -20,6 +21,7 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener {
 
 
     public GamePlay() {
+        map_generator = new MapGenerator(3 , 7);
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
@@ -31,6 +33,9 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener {
         //draw background
         g.setColor(Color.black);
         g.fillRect(1 , 1 , 692 , 592);
+
+        //draw the map
+        map_generator.draw((Graphics2D) g);
 
         //draw borders
         g.setColor(Color.black);
@@ -58,8 +63,42 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener {
                 ball_direction_y = -ball_direction_y;
             }
 
-            ball_position_x += ball_direction_x;
-            ball_position_y += ball_direction_y;
+            //A it is like a label and it helps us to know who is the loop that break (instead of write 'break' several times)
+            A: for (int i = 0; i < map_generator.map.length; i++) {
+                for (int j = 0; j < map_generator.map[0].length; j++) {
+                    if(map_generator.map[i][j] > 0) {
+                        int brick_x = j*map_generator.brick_width + 80;
+                        int brick_y = i*map_generator.brick_height + 50;
+                        int brick_width = map_generator.brick_width;
+                        int bruck_height = map_generator.brick_height;
+
+
+                        Rectangle rect = new Rectangle(brick_x , brick_y , brick_width , bruck_height);
+                        Rectangle ball_rect = new Rectangle(ball_position_x , ball_position_y , 20 , 20);
+                        Rectangle brick_rect = rect;
+
+                        if (brick_rect.intersects(brick_rect)) {
+                            map_generator.set_brick_value(0 , i , j);
+                            total_bricks--;
+                            score += 5;
+
+                            if ((ball_position_x+19) <= brick_rect.x || (ball_position_x+1) >= (brick_rect.x+ brick_rect.width)) {
+                                ball_direction_x = -ball_direction_x;
+                            }
+
+                            else {
+                                ball_direction_y = -ball_direction_y;
+                            }
+
+                            break A;
+                        }
+                    }
+                }
+            }
+
+            ball_position_x += (ball_direction_x+ball_direction_x);
+            ball_position_y += (ball_direction_y+ball_direction_y);
+
             if (ball_position_x < 0) {
                 ball_direction_x = -ball_direction_x;
             }
