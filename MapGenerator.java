@@ -38,6 +38,7 @@ public class MapGenerator {
         }
     }
 
+    //set the value of the bricks
     public void set_brick_value(int value , int row , int col) {
         map[row][col] = value;
     }
