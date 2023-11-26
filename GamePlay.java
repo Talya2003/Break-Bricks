@@ -43,6 +43,11 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener {
         g.fillRect(0 , 0, 692 , 3);
         g.fillRect(692 , 0 , 3 , 592);
 
+        //draw the score
+        g.setColor(Color.white);
+        g.setFont(new Font("Calibri" , Font.BOLD , 25));
+        g.drawString("Score: " + score , 570 , 30);
+
         //the bottom
         g.setColor(Color.green);
         g.fillRect(player_x , 550 , 100 , 8);
@@ -50,6 +55,47 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener {
         //the ball
         g.setColor(Color.yellow);
         g.fillOval(ball_position_x , ball_position_y , 20 , 20);
+
+        if (total_bricks <= 0) {
+            is_play = false;
+            ball_direction_x = 0;
+            ball_direction_y = 0;
+
+            //"disappear" the ball
+            g.setColor(Color.black);
+            g.fillOval(ball_position_x , ball_position_y , 20 , 20);
+
+            //"disappear" the bottom
+            g.setColor(Color.black);
+            g.fillRect(player_x , 550 , 100 , 8);
+
+            g.setColor(Color.green);
+            g.setFont(new Font("Calibri" , Font.BOLD , 30));
+            g.drawString("YOU WIN!!!" , 260 , 300);
+
+            g.setColor(Color.white);
+            g.setFont(new Font("Calibri" , Font.BOLD , 20));
+            g.drawString("Score: " + score , 280 , 330);
+
+            g.setColor(Color.red);
+            g.setFont(new Font("Calibri" , Font.BOLD , 15));
+            g.drawString("Press ENTER to restart" , 255 , 365);
+        }
+
+        if (ball_position_y > 570) {
+            is_play = false;
+            ball_direction_x = 0;
+            ball_direction_y = 0;
+            g.setColor(Color.red);
+            g.setFont(new Font("Calibri" , Font.BOLD , 30));
+            g.drawString("Game Over!!!" , 230 , 300);
+
+            g.setFont(new Font("Calibri" , Font.BOLD , 20));
+            g.drawString("Score: " + score , 280 , 330);
+
+            g.setFont(new Font("Calibri" , Font.BOLD , 15));
+            g.drawString("Press ENTER to restart" , 255 , 365);
+        }
 
         g.dispose();
     }
@@ -130,12 +176,29 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener {
             }
         }
 
-        else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             if (player_x < 10) {
                 player_x = 10;
             }
             else {
                 move_left();
+            }
+        }
+
+
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (!is_play) {
+                is_play = true;
+                ball_position_x = 120;
+                ball_position_y = 350;
+                ball_direction_x = -1;
+                ball_direction_y = -2;
+                player_x = 310;
+                score = 0;
+                total_bricks = 21;
+                map_generator = new MapGenerator(3 , 7);
+
+                repaint();
             }
         }
     }
