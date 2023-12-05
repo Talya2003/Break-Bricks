@@ -56,6 +56,8 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener {
         g.setColor(Color.yellow);
         g.fillOval(ball_position_x , ball_position_y , 20 , 20);
 
+
+        //checks if the game is over -- it means that all the bricks are bombed
         if (total_bricks <= 0) {
             is_play = false;
             ball_direction_x = 0;
